@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/Layout.astro';
+import PolyCard from '../components/PolyCard.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { matiere: 'mathematiques' }, props: { code: 'maths',    titre: 'Mathématiques' } },
+    { params: { matiere: 'physique' },      props: { code: 'physique', titre: 'Physique' } },
+  ];
+}
+
+const { code, titre } = Astro.props;
+
+const polys = (await getCollection('polys'))
+  .filter((p) => p.data.matiere === code)
+  .sort((a, b) => a.data.ordre - b.data.ordre);
+
+const annees = [
+  { slug: 'ptsi', label: '1re année — PTSI' },
+  { slug: 'pt',   label: '2e année — PT' },
+];
+---
+<BaseLayout>
+  <h1>{titre}</h1>
+
+  {polys.length === 0 && <p>Les polycopiés arrivent bientôt.</p>}
+
+  {annees.map((annee) => {
+    const polysAnnee = polys.filter((p) => p.data.annee === annee.slug);
+    if (polysAnnee.length === 0) return null;
+    return (
+      <section id={annee.slug}>
+        <h2>{annee.label}</h2>
+        {polysAnnee.map((p) => (
+          <PolyCard
+            titre={p.data.titre}
+            pdf={p.data.pdf}
+            ordre={p.data.ordre}
+            maj={p.data.maj}
+            matiere={p.data.matiere}
+          />
+        ))}
+      </section>
+    );
+  })}
+</BaseLayout>

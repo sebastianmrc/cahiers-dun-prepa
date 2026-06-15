@@ -1,0 +1,46 @@
+---
+interface Props {
+  titre: string;
+  pdf: string;
+  ordre?: number;
+  maj?: Date;
+  matiere?: string;
+}
+const { titre, pdf, ordre, maj, matiere } = Astro.props;
+const dateMaj = maj
+  ? new Intl.DateTimeFormat('fr-FR', { month: 'short', year: 'numeric' }).format(maj)
+  : null;
+const libelle: Record<string, string> = { maths: 'maths', physique: 'physique', si: 'SI' };
+---
+<article class="carte">
+  <div class="carte-tete">
+    {ordre != null && <span class="numero">{String(ordre).padStart(2, '0')}</span>}
+    <h3>{titre}</h3>
+  </div>
+  <p class="meta">
+    {matiere && <span>{libelle[matiere] ?? matiere}</span>}
+    {dateMaj && <span>maj {dateMaj}</span>}
+  </p>
+  <div class="actions">
+    <a href={pdf} target="_blank" rel="noopener">Consulter</a>
+    <a href={pdf} download>Télécharger</a>
+  </div>
+</article>
+
+<style>
+  .carte {
+    display: grid; grid-template-columns: 1fr auto; align-items: center;
+    gap: 0.3rem 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule);
+  }
+  .carte-tete { display: flex; align-items: baseline; gap: 0.75rem; }
+  .numero { font-family: var(--font-serif); color: var(--accent); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+  .carte h3 { font-size: var(--step-0); margin: 0; font-family: var(--font-sans); font-weight: 600; }
+  .meta { grid-column: 1; margin: 0; color: var(--ink-soft); font-size: var(--step--1); display: flex; gap: 0.75rem; }
+  .actions { grid-column: 2; grid-row: 1 / span 2; display: flex; gap: 1rem; }
+  .actions a { font-size: var(--step--1); text-decoration: none; color: var(--accent); white-space: nowrap; }
+  .actions a:hover { text-decoration: underline; }
+  @media (max-width: 32rem) {
+    .carte { grid-template-columns: 1fr; }
+    .actions { grid-column: 1; grid-row: auto; }
+  }
+</style>

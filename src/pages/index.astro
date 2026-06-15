@@ -1,11 +1,41 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/Layout.astro';
+import PolyCard from '../components/PolyCard.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const tous = await getCollection('polys');
+const compte = (m: string) => tous.filter((p) => p.data.matiere === m).length;
+
+const matieres = [
+  { slug: 'mathematiques', label: 'Mathématiques', n: compte('maths') },
+  { slug: 'physique', label: 'Physique', n: compte('physique') },
+  { slug: 'si', label: "Sciences de l'ingénieur", n: compte('si'), note: 'chaîne interactive' },
+];
+
+const derniers = [...tous]
+  .sort((a, b) => b.data.maj.getTime() - a.data.maj.getTime())
+  .slice(0, 5);
 ---
+<BaseLayout>
+  <section class="hero">
+    <h1>Deux ans de CPGE PT, rédigés en LaTeX, en accès libre.</h1>
+  </section>
 
-<Layout>
-	<Welcome />
-</Layout>
+  <section class="grille-matieres">
+    {matieres.map((m) => (
+      <a href={`/${m.slug}/`} class="entree">
+        <h2>{m.label}</h2>
+        <p>{m.n} {m.n > 1 ? 'polycopiés' : 'polycopié'}{m.note ? ` · ${m.note}` : ''}</p>
+        <span class="fleche">Consulter →</span>
+      </a>
+    ))}
+  </section>
+
+  <section class="derniers">
+    <h2>Derniers ajouts</h2>
+    {derniers.map((p) => (
+      <PolyCard titre={p.data.titre} pdf={p.data.pdf} ordre={p.data.ordre} maj={p.data.maj} matiere={p.data.matiere} />
+    ))}
+  </section>
+  
+</BaseLayout>

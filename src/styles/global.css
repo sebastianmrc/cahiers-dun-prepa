@@ -1,0 +1,79 @@
+/* ===== Jetons ===== */
+:root {
+  --paper: #faf9f6;
+  --ink: #1d1d1b;
+  --ink-soft: #55534e;
+  --rule: #d8d5ce;
+  --accent: #2d4a8a; /* ← remplace par ta couleur d'accent LaTeX */
+
+  --pad: clamp(1.25rem, 4vw, 3rem);
+  --step--1: 0.84rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: clamp(2rem, 5vw, 3rem);
+}
+
+/* ===== Base ===== */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+h1, h2, h3 { font-family: var(--font-serif); line-height: 1.15; font-weight: 600; }
+
+/* ===== Mise en page ===== */
+.contenu { max-width: 64rem; margin-inline: auto; padding: var(--pad); }
+
+/* ===== En-tête ===== */
+.entete {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 1rem; max-width: 64rem; margin-inline: auto; padding: 1.25rem var(--pad);
+  border-bottom: 1px solid var(--rule);
+}
+.entete .marque { font-family: var(--font-serif); font-size: var(--step-1); font-weight: 600; text-decoration: none; }
+.entete nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+.entete nav a {
+  text-decoration: none; color: var(--ink-soft); font-size: var(--step--1);
+  padding-bottom: 2px; border-bottom: 1px solid transparent;
+}
+.entete nav a:hover { color: var(--ink); }
+.entete nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ===== Hero ===== */
+.hero { padding: 2rem 0 1rem; }
+.hero h1 { font-size: var(--step-3); max-width: 18ch; margin: 0; }
+
+/* ===== Grille des matières ===== */
+.grille-matieres {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 2rem 0;
+}
+.entree {
+  background: var(--paper); padding: 1.5rem; text-decoration: none;
+  display: flex; flex-direction: column; gap: 0.4rem; transition: background 0.15s ease;
+}
+.entree:hover { background: #fff; }
+.entree h2 { font-size: var(--step-2); margin: 0; }
+.entree p { margin: 0; color: var(--ink-soft); font-size: var(--step--1); }
+.entree .fleche { margin-top: auto; color: var(--accent); font-size: var(--step--1); }
+
+/* ===== Derniers ajouts ===== */
+.derniers { margin-top: 3rem; }
+.derniers h2 { font-size: var(--step-1); border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; }
+
+/* ===== Pied ===== */
+.pied {
+  max-width: 64rem; margin: 4rem auto 0; padding: 2rem var(--pad);
+  border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: var(--step--1);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+}
+.pied p { margin: 0; }
+
+/* ===== Accessibilité ===== */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

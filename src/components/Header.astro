@@ -1,0 +1,17 @@
+---
+const liens = [
+  { href: '/mathematiques/', label: 'Mathématiques' },
+  { href: '/physique/', label: 'Physique' },
+  { href: '/si/', label: 'SI' },
+  { href: '/a-propos/', label: 'À propos' },
+];
+const ici = Astro.url.pathname;
+---
+<header class="entete">
+  <a href="/" class="marque">Cahiers d'un prépa</a>
+  <nav>
+    {liens.map((l) => (
+      <a href={l.href} aria-current={ici.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>
+    ))}
+  </nav>
+</header>
