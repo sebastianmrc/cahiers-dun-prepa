@@ -12,6 +12,7 @@ const polys = defineCollection({
     titre: z.string(),
     matiere: z.enum(['maths', 'physique', 'si']),
     annee: z.enum(['ptsi', 'pt']),
+    type: z.enum(['cours', 'synthese']).default('cours'),
     ordre: z.number(),
     pdf: z.string(),
     maj: z.coerce.date(),

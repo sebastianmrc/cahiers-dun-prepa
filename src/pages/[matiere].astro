@@ -29,18 +29,22 @@ const annees = [
   {annees.map((annee) => {
     const polysAnnee = polys.filter((p) => p.data.annee === annee.slug);
     if (polysAnnee.length === 0) return null;
+    const cours = polysAnnee.filter((p) => p.data.type === 'cours');
+    const syntheses = polysAnnee.filter((p) => p.data.type === 'synthese');
     return (
       <section id={annee.slug}>
         <h2>{annee.label}</h2>
-        {polysAnnee.map((p) => (
-          <PolyCard
-            titre={p.data.titre}
-            pdf={p.data.pdf}
-            ordre={p.data.ordre}
-            maj={p.data.maj}
-            matiere={p.data.matiere}
-          />
+        {cours.map((p) => (
+          <PolyCard titre={p.data.titre} pdf={p.data.pdf} ordre={p.data.ordre} maj={p.data.maj} matiere={p.data.matiere} />
         ))}
+        {syntheses.length > 0 && (
+          <Fragment>
+            <h3>Fiches de synthèse</h3>
+            {syntheses.map((p) => (
+              <PolyCard titre={p.data.titre} pdf={p.data.pdf} ordre={p.data.ordre} maj={p.data.maj} matiere={p.data.matiere} />
+            ))}
+          </Fragment>
+        )}
       </section>
     );
   })}
