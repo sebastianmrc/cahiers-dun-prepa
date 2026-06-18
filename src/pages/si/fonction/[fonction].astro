@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/Layout.astro';
+import PolyCard from '../../../components/PolyCard.astro';
+import { FONCTIONS } from '../../../data/fonctions';
+
+export function getStaticPaths() {
+  return FONCTIONS.map((f) => ({
+    params: { fonction: f.id },
+    props: { fonction: f },
+  }));
+}
+
+const { fonction } = Astro.props;
+
+const polys = (await getCollection('polys'))
+  .filter((p) => p.data.fonctions.includes(fonction.id))
+  .sort((a, b) => a.data.ordre - b.data.ordre);
+---
+<BaseLayout>
+  <p><a href="/si/">← Retour à la chaîne SI</a></p>
+
+  <h1>{fonction.label}</h1>
+  <p>{fonction.definition}</p>
+  <p>Composants types : {fonction.composants.join(', ')}.</p>
+
+  <h2>Polycopiés associés</h2>
+  {polys.length === 0 && <p>Aucun polycopié pour cette fonction pour l'instant.</p>}
+  {polys.map((p) => (
+    <PolyCard
+      titre={p.data.titre} 
+      pdf={p.data.pdf}
+      ordre={p.data.ordre}
+      maj={p.data.maj}
+      matiere={p.data.matiere}
+    />
+  ))}
+</BaseLayout>

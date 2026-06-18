@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/Layout.astro';
+import PolyCard from '../../components/PolyCard.astro';
+import ChaineSI from '../../components/ChaineSI.astro';
+
+const polys = (await getCollection('polys'))
+  .filter((p) => p.data.matiere === 'si')
+  .sort((a, b) => a.data.ordre - b.data.ordre);
+
+const annees = [
+  { slug: 'ptsi', label: '1re année — PTSI' },
+  { slug: 'pt',   label: '2e année — PT' },
+];
+---
+<BaseLayout>
+  <h1>Sciences de l'ingénieur</h1>
+  <ChaineSI />
+  
+  {polys.length === 0 && <p>Les polycopiés arrivent bientôt.</p>}
+
+  {annees.map((annee) => {
+    const polysAnnee = polys.filter((p) => p.data.annee === annee.slug);
+    if (polysAnnee.length === 0) return null;
+    return (
+      <section id={annee.slug}>
+        <h2>{annee.label}</h2>
+        {polysAnnee.map((p) => (
+          <PolyCard
+            titre={p.data.titre}
+            pdf={p.data.pdf}
+            ordre={p.data.ordre}
+            maj={p.data.maj}
+            matiere={p.data.matiere}
+          />
+        ))}
+      </section>
+    );
+  })}
+</BaseLayout>
