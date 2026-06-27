@@ -39,7 +39,7 @@ const annees = [
         ))}
         {syntheses.length > 0 && (
           <Fragment>
-            <h3>Fiches de synthèse</h3>
+            <h3>Polycopiés complets</h3>
             {syntheses.map((p) => (
               <PolyCard titre={p.data.titre} pdf={p.data.pdf} ordre={p.data.ordre} maj={p.data.maj} matiere={p.data.matiere} />
             ))}

@@ -1,5 +1,5 @@
 ---
-titre: Momemts de variables aléatoires
+titre: Moments de variables aléatoires
 matiere: maths
 annee: ptsi
 ordre: 26

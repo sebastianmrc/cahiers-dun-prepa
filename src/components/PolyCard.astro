@@ -17,10 +17,12 @@ const libelle: Record<string, string> = { maths: 'maths', physique: 'physique', 
     {ordre != null && <span class="numero">{String(ordre).padStart(2, '0')}</span>}
     <h3>{titre}</h3>
   </div>
+  <!--
   <p class="meta">
     {matiere && <span>{libelle[matiere] ?? matiere}</span>}
     {dateMaj && <span>maj {dateMaj}</span>}
   </p>
+-->
   <div class="actions">
     <a href={pdf} target="_blank" rel="noopener">Consulter</a>
     <a href={pdf} download>Télécharger</a>
