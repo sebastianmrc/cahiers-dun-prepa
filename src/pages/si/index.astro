@@ -1,40 +1,217 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/Layout.astro';
-import PolyCard from '../../components/PolyCard.astro';
 import ChaineSI from '../../components/ChaineSI.astro';
 
 const polys = (await getCollection('polys'))
   .filter((p) => p.data.matiere === 'si')
   .sort((a, b) => a.data.ordre - b.data.ordre);
 
-const annees = [
-  { slug: 'ptsi', label: '1re année — PTSI' },
-  { slug: 'pt',   label: '2e année — PT' },
-];
+const domaines = [
+  {
+    id: 'modelisation-asservissements',
+    titre: 'Modélisation, signaux et asservissements',
+  },
+  {
+    id: 'mecanique-solides-mecanismes',
+    titre: 'Mécanique des solides et des mécanismes',
+  },
+  {
+    id: 'rdm-structures',
+    titre: 'RDM et dimensionnement des structures',
+  },
+  {
+    id: 'conception-specifications',
+    titre: 'Conception mécanique et spécifications',
+  },
+  {
+    id: 'materiaux-procedes',
+    titre: 'Matériaux et choix produit-procédé',
+  },
+  {
+    id: 'fabrication-industrialisation',
+    titre: 'Fabrication et industrialisation',
+  },
+  {
+    id: 'mesures-validation',
+    titre: 'Mesures, essais et validation',
+  },
+] as const;
 ---
-<BaseLayout>
-  <h1>Sciences de l'ingénieur</h1>
-  <ChaineSI />
-  
-  {polys.length === 0 && <p>Les polycopiés arrivent bientôt.</p>}
+<BaseLayout
+  titre="Sciences de l'ingénieur"
+>
+  <header class="intro-si">
+    <p class="surtitre">PTSI / PT</p>
+    <h1>Sciences de l'ingénieur</h1>  
+  </header>
 
-  {annees.map((annee) => {
-    const polysAnnee = polys.filter((p) => p.data.annee === annee.slug);
-    if (polysAnnee.length === 0) return null;
-    return (
-      <section id={annee.slug}>
-        <h2>{annee.label}</h2>
-        {polysAnnee.map((p) => (
-          <PolyCard
-            titre={p.data.titre}
-            pdf={p.data.pdf}
-            ordre={p.data.ordre}
-            maj={p.data.maj}
-            matiere={p.data.matiere}
-          />
-        ))}
-      </section>
-    );
-  })}
+  <section class="section-si">
+    <div class="section-tete">
+      <p class="numero-section">01</p>
+      <div>
+        <h2>Chaînes fonctionnelles</h2>
+      </div>
+    </div>
+
+    <ChaineSI />
+  </section>
+
+  <section class="section-si">
+    <div class="section-tete">
+      <p class="numero-section">02</p>
+      <div>
+        <h2>Thèmes du programme</h2>
+      </div>
+    </div>
+
+    <div class="grille-domaines">
+      {domaines.map((domaine) => {
+        const documents = polys.filter((p) => p.data.domainesSi.includes(domaine.id));
+        return (
+          <article class="domaine">
+            <h3>{domaine.titre}</h3>
+            {documents.length === 0 ? (
+              <p class="vide">Aucun document pour le moment.</p>
+            ) : (
+              <ul class="documents-compacts">
+                {documents.map((document) => (
+                  <li>
+                    <span>{document.data.titre}</span>
+                    <span class="actions-document">
+                      <a href={document.data.pdf} target="_blank" rel="noopener">Consulter</a>
+                      <a href={document.data.pdf} download>Télécharger</a>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        );
+      })}
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .intro-si {
+    max-width: 46rem;
+    padding: 2rem 0 0.5rem;
+  }
+
+  .intro-si h1 {
+    margin: 0;
+    font-size: var(--step-3);
+  }
+
+  .intro-si p {
+    color: var(--ink-soft);
+  }
+
+  .intro-si .surtitre {
+    margin: 0 0 0.35rem;
+    color: var(--accent);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .section-si {
+    margin-top: 3rem;
+  }
+
+  .section-tete {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-tete h2 {
+    margin: 0;
+    font-size: var(--step-1);
+  }
+
+  .section-tete p {
+    margin: 0.45rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  .numero-section {
+    margin: 0;
+    color: var(--accent);
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .grille-domaines {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1px;
+    margin-top: 1.5rem;
+    border: 1px solid var(--rule);
+    background: var(--rule);
+  }
+
+  .domaine {
+    background: var(--paper);
+    padding: 1.25rem;
+  }
+
+  .domaine h3 {
+    margin: 0;
+    font-size: var(--step-0);
+  }
+
+  .documents-compacts {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .documents-compacts li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    padding: 0.65rem 0;
+    border-top: 1px solid var(--rule);
+    font-size: var(--step--1);
+  }
+
+  .actions-document {
+    display: flex;
+    gap: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .actions-document a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .actions-document a:hover {
+    text-decoration: underline;
+  }
+
+  .vide {
+    margin: 0.75rem 0 0;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  @media (max-width: 42rem) {
+    .section-tete {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+
+    .documents-compacts li {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>

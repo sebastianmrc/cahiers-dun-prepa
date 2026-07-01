@@ -8,12 +8,10 @@ const tousPolys = await getCollection('polys');
 const donnees = FONCTIONS.map((f) => ({
   id: f.id,
   label: f.label,
-  definition: f.definition,
-  composants: [...f.composants],
   polys: tousPolys
     .filter((p) => p.data.fonctions.includes(f.id))
     .sort((a, b) => a.data.ordre - b.data.ordre)
-    .map((p) => ({ titre: p.data.titre, pdf: p.data.pdf })),
+    .map((p) => ({ titre: p.data.titre, pdf: p.data.pdf, ordre: p.data.ordre })),
 }));
 
 const info = FONCTIONS.filter((f) => f.chaine === 'information');
@@ -49,16 +47,23 @@ const puissance = FONCTIONS.filter((f) => f.chaine === 'puissance');
   function afficher(id) {
     const d = parId[id];
     if (!d) return;
-    const polysHtml = d.polys.length
-      ? d.polys.map((p) => `<li><a href="${p.pdf}" target="_blank" rel="noopener">${p.titre}</a></li>`).join('')
-      : '<li>Aucun polycopié pour l’instant.</li>';
+    const documentsHtml = d.polys.length
+      ? d.polys.map((p) => `
+        <li>
+          <span class="numero-document">${String(p.ordre).padStart(2, '0')}</span>
+          <span class="titre-document">${p.titre}</span>
+          <span class="actions-document">
+            <a href="${p.pdf}" target="_blank" rel="noopener">Consulter</a>
+            <a href="${p.pdf}" download>Télécharger</a>
+          </span>
+        </li>
+      `).join('')
+      : '<p class="vide">Aucun document pour le moment.</p>';
     panneau.innerHTML = `
       <button type="button" class="fermer" aria-label="Fermer le panneau">×</button>
       <h2 tabindex="-1">${d.label}</h2>
-      <p>${d.definition}</p>
-      <p>Composants types : ${d.composants.join(', ')}.</p>
-      <ul class="polys-panneau">${polysHtml}</ul>
-      <p><a href="/si/fonction/${id}/">Voir la page complète →</a></p>
+      ${d.polys.length ? `<ul class="polys-panneau">${documentsHtml}</ul>` : documentsHtml}
+      <p class="lien-complet"><a href="/si/fonction/${id}/">Voir la page complète →</a></p>
     `;
     panneau.hidden = false;
     blocs.forEach((b) => b.removeAttribute('aria-current'));
@@ -112,13 +117,69 @@ const puissance = FONCTIONS.filter((f) => f.chaine === 'puissance');
   .panneau { position: relative; border: 1px solid var(--filet, #d8d5ce); border-radius: 8px; padding: 1.25rem 1.5rem; margin-top: 0.5rem; }
   .panneau h2 { margin: 0 0 0.5rem; outline: none; }
   .panneau .fermer { position: absolute; top: 0.5rem; right: 0.75rem; border: none; background: none; font-size: 1.4rem; line-height: 1; cursor: pointer; color: #888; }
-  .panneau .polys-panneau { margin: 0.5rem 0; padding-left: 1.2rem; }
+  .panneau .polys-panneau {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .panneau .polys-panneau li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--rule, #d8d5ce);
+  }
+
+  .numero-document {
+    color: var(--accent, #b00);
+    font-family: var(--font-serif);
+    font-size: var(--step--1, 0.84rem);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .titre-document {
+    font-weight: 600;
+  }
+
+  .actions-document {
+    display: flex;
+    gap: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .actions-document a {
+    color: var(--accent, #b00);
+    text-decoration: none;
+  }
+
+  .actions-document a:hover {
+    text-decoration: underline;
+  }
+
+  .vide {
+    margin: 0.75rem 0 0;
+    color: var(--ink-soft, #555);
+  }
+
+  .lien-complet {
+    margin: 1rem 0 0;
+  }
+
 @media (max-width: 600px) {
     .blocs { flex-direction: column; align-items: stretch; }
     .blocs li { display: block; }
     .bloc { display: block; text-align: center; }
     .blocs li:not(:last-child)::after {
       content: "↓"; display: block; margin: 0.35rem 0 0; text-align: center;
+    }
+    .panneau .polys-panneau li {
+      grid-template-columns: auto 1fr;
+      gap: 0.25rem;
+    }
+    .actions-document {
+      grid-column: 2;
     }
   }
 </style>

@@ -3,6 +3,16 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { FONCTION_IDS } from './data/fonctions';
 
+const DOMAINES_SI = [
+  'modelisation-asservissements',
+  'mecanique-solides-mecanismes',
+  'rdm-structures',
+  'conception-specifications',
+  'materiaux-procedes',
+  'fabrication-industrialisation',
+  'mesures-validation',
+] as const;
+
 const polys = defineCollection({
   loader: glob({
     pattern: '**/*.md',
@@ -17,6 +27,7 @@ const polys = defineCollection({
     pdf: z.string(),
     maj: z.coerce.date(),
     fonctions: z.array(z.enum(FONCTION_IDS)).default([]),
+    domainesSi: z.array(z.enum(DOMAINES_SI)).default([]),
     resume: z.string().optional(),
   }),
 });
