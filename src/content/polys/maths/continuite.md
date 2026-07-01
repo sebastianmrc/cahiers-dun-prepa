@@ -1,5 +1,5 @@
 ---
-titre: Coninuité 
+titre: Continuité 
 matiere: maths
 annee: ptsi
 ordre: 11
