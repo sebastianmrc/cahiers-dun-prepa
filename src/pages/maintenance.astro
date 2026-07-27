@@ -1,0 +1,445 @@
+---
+import { Font } from 'astro:assets';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#faf9f6" />
+    <title>Compilation en cours — Cahiers d'un prépa</title>
+    <meta
+      name="description"
+      content="Cahiers d'un prépa est temporairement en maintenance et reviendra prochainement."
+    />
+    <Font cssVariable="--font-serif" preload />
+    <Font cssVariable="--font-sans" preload />
+  </head>
+
+  <body>
+    <main>
+      <p class="marque">Cahiers d'un prépa</p>
+
+      <section class="message" aria-labelledby="titre-maintenance">
+        <p class="statut"><span aria-hidden="true"></span> Compilation en cours</p>
+        <h1 id="titre-maintenance">Un peu de patience,<br />on peaufine la mise en page.</h1>
+        <p class="introduction">
+          Les cahiers repassent par LaTeX. Le site reviendra prochainement,
+          dès que tout sera correctement <em>typesetté</em>.
+        </p>
+      </section>
+
+      <div class="atelier" aria-label="Illustration d'une compilation LaTeX en cours">
+        <div class="feuille" aria-hidden="true">
+          <div class="coin"></div>
+          <p class="commande">\documentclass&#123;cahiers-prepa&#125;</p>
+          <p class="commande">\begin&#123;document&#125;</p>
+          <div class="faux-titre"></div>
+          <div class="ligne longue"></div>
+          <div class="ligne moyenne"></div>
+          <div class="ligne courte"></div>
+          <div class="equation">
+            <span>e<sup>iπ</sup> + 1 = 0</span>
+          </div>
+          <div class="ligne longue"></div>
+          <div class="ligne moyenne"></div>
+          <p class="commande">\end&#123;document&#125;<span class="curseur"></span></p>
+        </div>
+
+        <div class="console">
+          <div class="console-entete">
+            <span class="pastille"></span>
+            <span class="pastille"></span>
+            <span class="pastille"></span>
+            <span class="console-titre">pdfTeX</span>
+          </div>
+          <p><span class="invite">$</span> latex nouvelle-version.tex</p>
+          <p class="sortie">Typesetting pages…</p>
+          <div class="progression" aria-hidden="true"><span></span></div>
+          <p class="sortie patience">Encore quelques ajustements<span class="points"></span></p>
+        </div>
+      </div>
+
+      <footer>PTSI · PT — Polycopiés rédigés avec soin</footer>
+    </main>
+  </body>
+</html>
+
+<style>
+  :root {
+    --papier: #faf9f6;
+    --encre: #1d1d1b;
+    --encre-douce: #65625c;
+    --regle: #d8d5ce;
+    --accent: #2d4a8a;
+    --blanc: #fffefb;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-width: 20rem;
+    min-height: 100vh;
+    background:
+      linear-gradient(rgba(45, 74, 138, 0.035) 1px, transparent 1px),
+      var(--papier);
+    background-size: 100% 2rem;
+    color: var(--encre);
+    font-family: var(--font-sans), sans-serif;
+  }
+
+  main {
+    width: min(70rem, 100%);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 0.82fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: clamp(2.5rem, 7vw, 7rem);
+    align-items: center;
+  }
+
+  .marque {
+    grid-column: 1 / -1;
+    align-self: start;
+    margin: 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--regle);
+    font-family: var(--font-serif), serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .message {
+    padding-block: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  .statut {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 0 1.4rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .statut span {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(45, 74, 138, 0.35);
+    animation: impulsion 2s ease-out infinite;
+  }
+
+  h1 {
+    max-width: 14ch;
+    margin: 0;
+    font-family: var(--font-serif), serif;
+    font-size: clamp(2.7rem, 6.5vw, 5.5rem);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+
+  .introduction {
+    max-width: 36rem;
+    margin: 1.8rem 0 0;
+    color: var(--encre-douce);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .introduction em {
+    color: var(--encre);
+    font-family: var(--font-serif), serif;
+  }
+
+  .atelier {
+    position: relative;
+    min-height: 32rem;
+    display: grid;
+    place-items: start center;
+    align-content: center;
+  }
+
+  .feuille {
+    position: relative;
+    width: min(19rem, 82%);
+    aspect-ratio: 0.72;
+    padding: 2rem 1.65rem;
+    overflow: hidden;
+    border: 1px solid #dfdcd4;
+    background: var(--blanc);
+    box-shadow: 0 1.5rem 3rem rgba(45, 42, 35, 0.11);
+    transform: rotate(2deg);
+    animation: feuille 4s ease-in-out infinite;
+  }
+
+  .coin {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 2.8rem;
+    height: 2.8rem;
+    background: linear-gradient(225deg, var(--papier) 49%, var(--regle) 50%, #eeece6 52%);
+  }
+
+  .commande {
+    margin: 0 0 0.55rem;
+    color: var(--accent);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.58rem;
+  }
+
+  .faux-titre {
+    width: 70%;
+    height: 0.65rem;
+    margin: 2.4rem auto 1.8rem;
+    background: var(--encre);
+    opacity: 0.88;
+  }
+
+  .ligne {
+    height: 0.24rem;
+    margin: 0.55rem 0;
+    border-radius: 1rem;
+    background: #c8c5be;
+    transform-origin: left;
+    animation: composition 3.2s ease-in-out infinite;
+  }
+
+  .ligne.longue {
+    width: 100%;
+  }
+
+  .ligne.moyenne {
+    width: 78%;
+    animation-delay: 0.15s;
+  }
+
+  .ligne.courte {
+    width: 55%;
+    animation-delay: 0.3s;
+  }
+
+  .equation {
+    margin: 1.8rem 0;
+    text-align: center;
+    font-family: var(--font-serif), serif;
+    font-size: 1.25rem;
+  }
+
+  .curseur {
+    display: inline-block;
+    width: 0.32rem;
+    height: 0.72rem;
+    margin-left: 0.2rem;
+    vertical-align: -0.12rem;
+    background: var(--accent);
+    animation: clignotement 0.9s steps(1) infinite;
+  }
+
+  .console {
+    position: absolute;
+    right: -0.5rem;
+    bottom: 1rem;
+    width: min(22rem, 92%);
+    padding: 0 1.1rem 1.05rem;
+    border: 1px solid #303238;
+    border-radius: 0.35rem;
+    background: #202126;
+    box-shadow: 0 1rem 2rem rgba(20, 20, 20, 0.2);
+    color: #efefe9;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.68rem;
+    transform: rotate(-1.5deg);
+  }
+
+  .console-entete {
+    height: 2.15rem;
+    margin: 0 -1.1rem 0.9rem;
+    padding: 0 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.38rem;
+    border-bottom: 1px solid #36383f;
+  }
+
+  .pastille {
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 50%;
+    background: #7b7d83;
+  }
+
+  .console-titre {
+    margin-left: auto;
+    color: #a9abb0;
+  }
+
+  .console p {
+    margin: 0.6rem 0;
+  }
+
+  .invite {
+    color: #8facff;
+  }
+
+  .sortie {
+    color: #b8b9bc;
+  }
+
+  .progression {
+    height: 0.25rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #41434a;
+  }
+
+  .progression span {
+    display: block;
+    width: 42%;
+    height: 100%;
+    border-radius: inherit;
+    background: #8facff;
+    animation: compilation 2.2s ease-in-out infinite;
+  }
+
+  .points::after {
+    content: "";
+    animation: points 1.5s steps(4, end) infinite;
+  }
+
+  footer {
+    grid-column: 1 / -1;
+    align-self: end;
+    padding-top: 1rem;
+    border-top: 1px solid var(--regle);
+    color: var(--encre-douce);
+    font-size: 0.78rem;
+  }
+
+  @keyframes impulsion {
+    70% {
+      box-shadow: 0 0 0 0.55rem rgba(45, 74, 138, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(45, 74, 138, 0);
+    }
+  }
+
+  @keyframes feuille {
+    0%,
+    100% {
+      transform: rotate(2deg) translateY(0);
+    }
+    50% {
+      transform: rotate(1deg) translateY(-0.45rem);
+    }
+  }
+
+  @keyframes composition {
+    0%,
+    20% {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    60%,
+    100% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes clignotement {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes compilation {
+    0% {
+      transform: translateX(-115%);
+    }
+    55% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(235%);
+    }
+  }
+
+  @keyframes points {
+    0% {
+      content: "";
+    }
+    25% {
+      content: ".";
+    }
+    50% {
+      content: "..";
+    }
+    75%,
+    100% {
+      content: "...";
+    }
+  }
+
+  @media (max-width: 49rem) {
+    main {
+      grid-template-columns: 1fr;
+    }
+
+    .message {
+      padding-block: 3.5rem 2rem;
+    }
+
+    h1 {
+      max-width: 13ch;
+    }
+
+    .atelier {
+      min-height: 30rem;
+      margin-bottom: 3rem;
+    }
+
+    .console {
+      right: 0;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .atelier {
+      min-height: 25rem;
+    }
+
+    .feuille {
+      width: 70%;
+    }
+
+    .console {
+      bottom: 0;
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+</style>
