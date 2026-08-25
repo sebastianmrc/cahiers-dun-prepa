@@ -1,5 +1,5 @@
 ---
-titre: Traitements termiques des aciers
+titre: Traitements thermiques des aciers
 matiere: si
 annee: pt
 ordre: 6
